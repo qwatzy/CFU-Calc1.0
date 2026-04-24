@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFU Calc</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; padding: 20px; background: #f0f0f7; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        input { width: 100%; padding: 12px; margin: 8px 0 18px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #007AFF; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; text-align: center; font-weight: bold; font-size: 20px; }
+        .good { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .bad { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 style="text-align:center;">$\mu L$ Plating Calc</h2>
+    
+    <label>Prev. Plate CFU:</label>
+    <input type="number" id="pCFU" inputmode="decimal">
+    
+    <label>Prev. Vol Plated ($\mu L$):</label>
+    <input type="number" id="pVol" inputmode="decimal">
+    
+    <label>Target CFU:</label>
+    <input type="number" id="tCFU" value="100" inputmode="decimal">
+
+    <button onclick="doMath()">Calculate Volume</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function doMath() {
+    const c1 = parseFloat(document.getElementById('pCFU').value);
+    const v1 = parseFloat(document.getElementById('pVol').value);
+    const target = parseFloat(document.getElementById('tCFU').value);
+    const resDiv = document.getElementById('result');
+
+    if (isNaN(c1) || isNaN(v1) || isNaN(target)) {
+        alert("Please fill in all numbers");
+        return;
+    }
+
+    // Math: (Target / (CFU / Vol))
+    const finalVol = (target / (c1 / v1)).toFixed(1);
+    
+    resDiv.style.display = "block";
+    resDiv.innerHTML = "Plate " + finalVol + " μL";
+
+    if (finalVol >= 20 && finalVol <= 200) {
+        resDiv.className = "good";
+    } else {
+        resDiv.className = "bad";
+        resDiv.innerHTML += "<br><span style='font-size:14px;'>⚠️ Outside 20-200μL range!</span>";
+    }
+}
+</script>
+
+</body>
+</html>
